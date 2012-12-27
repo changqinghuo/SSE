@@ -1,0 +1,2 @@
+300352.SZ,(<class 'urllib2.HTTPError'>, HTTPError(), <traceback object at 0x9ce70f4>)
+002160.SZ,(<class 'urllib2.HTTPError'>, HTTPError(), <traceback object at 0x9ce743c>)
