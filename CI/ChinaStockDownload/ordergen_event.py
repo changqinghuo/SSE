@@ -11,7 +11,7 @@ Created on March, 5, 2012
 @summary: Event Profiler Tutorial
 '''
 
-
+import pdb
 import pandas
 from qstkutil import DataAccess as da
 import numpy as np
@@ -74,8 +74,8 @@ def findEvents(symbols, startday,endday, marketSymbol,verbose=False):
 	mktneutDM = close
 	np_eventmat = copy.deepcopy(mktneutDM)
     	for sym in symbols:
-		for time in timestamps:
-			np_eventmat[sym][time]=np.NAN
+            for time in timestamps:
+                np_eventmat[sym][time]=np.NAN
 
 	if verbose:
             print __name__ + " finding events"
@@ -86,14 +86,14 @@ def findEvents(symbols, startday,endday, marketSymbol,verbose=False):
 	# And if the market falls 5%, then the stock should fall more than 10% to mark the event.
     	output = open(output_flie, 'w')
 	output_content = []
-	for i in range(1,len(timestamps)):	
+	for i in range(1,len(timestamps)):
 	    for symbol in symbols:
-	    
+
 
 	        if  close[symbol][i-1] >= 7 and close[symbol][i] < 7 : # When market fall is more than 3% and also the stock compared to market is also fell by more than 5%.
              		np_eventmat[symbol][i] = 1.0  #overwriting by the bit, marking the event
                     	buy_date = timestamps[i]
-                        if i+5 < len(mktneutDM[symbol]): 
+                        if i+5 < len(mktneutDM[symbol]):
                     		sell_date = timestamps[i+5];
                         else:
                                 sell_date = timestamps[-1];
@@ -111,12 +111,12 @@ def findEvents(symbols, startday,endday, marketSymbol,verbose=False):
 			output_content.append(output_line)
         output_content = sorted(output_content, key = lambda x: x[0])
         for item in output_content:
-	    d = item[0];         	
+	    d = item[0];
 	    line = str(d.year) + ","+ str(d.month) + "," + str(d.day) + ","
             line += item[1] + ","
             line += item[2] + "," + str(item[3])+"\n"
             output.write(line)
-			
+
 	output.close()
 
 	return np_eventmat
@@ -127,6 +127,7 @@ def findEvents(symbols, startday,endday, marketSymbol,verbose=False):
 #################################################
 
 #SSE List
+pdb.set_trace()
 dataobj = da.DataAccess('Yahoo')
 symbols_2012 = dataobj.get_symbols_from_list("chinastock")
 
