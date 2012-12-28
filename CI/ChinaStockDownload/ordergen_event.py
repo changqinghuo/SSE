@@ -51,7 +51,7 @@ output_flie = "event_orders.csv"
 def findEvents(symbols, startday,endday, marketSymbol,verbose=False):
 
 	# Reading the Data for the list of Symbols.
-	timeofday=dt.timedelta(hours=0)
+	timeofday=dt.timedelta(hours=16)
 	timestamps = du.getSSEdays(startday,endday,timeofday)
 	dataobj = da.DataAccess('Yahoo')
 	if verbose:
@@ -60,6 +60,7 @@ def findEvents(symbols, startday,endday, marketSymbol,verbose=False):
 	close = dataobj.get_data(timestamps, symbols, closefield)
 	for sym in symbols:
         	print sym
+            	print close[sym]
 
 	# Completing the Data - Removing the NaN values from the Matrix
 	#close = (close.fillna(method='ffill')).fillna(method='backfill')
@@ -130,7 +131,6 @@ def findEvents(symbols, startday,endday, marketSymbol,verbose=False):
 pdb.set_trace()
 dataobj = da.DataAccess('Yahoo')
 symbols_2012 = dataobj.get_symbols_from_list("chinastock")
-
 # You might get a message about some files being missing, don't worry about it.
 # You might get a message about some files being missing, don't worry about it.
 
