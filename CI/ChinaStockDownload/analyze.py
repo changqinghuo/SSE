@@ -16,24 +16,30 @@ bechmark = sys.argv[2]
 symbols = []
 symbols.append(str(bechmark))
 
-dataobj = da.DataAccess('Yahoo')
-startday = dt.datetime(2008,1,1)
-endday = dt.datetime(2009,12,31)
-timeofday = dt.timedelta(hours=16)
-timestamps = du.getNYSEdays(startday, endday, timeofday)
-close = dataobj.get_data(timestamps, symbols, 'close')
-close = (close.fillna(method='ffill')).fillna(method='backfill')
+
 
 value_file = open(sys.argv[1])
 values = []
+i = 0
 for line in value_file:
     year = int(line.split(',')[0])
     mon = int(line.split(',')[1])
     day = int(line.split(',')[2])
     value_date = dt.datetime(year, mon, day)
-    if value_date >= startday and value_date < endday:
-         values.append(float(line.split(',')[3]))
+    item = []
+    item.append(value_date)
+    item.append(float(line.split(',')[3]))
+    values.append(item)
+
+dataobj = da.DataAccess('Yahoo')
+startday = values[0][0]
+endday = values[-1][0]
+timeofday = dt.timedelta(hours=16)
+timestamps = du.getSSEdays(startday, endday, timeofday)
+close = dataobj.get_data(timestamps, symbols, 'close')
+close = (close.fillna(method='ffill')).fillna(method='backfill')
 plt.clf()
+
 pricedat = close.values # pull the 2D ndarray out of the pandas object
 print len(pricedat)
 spx_dailyret_tmp = pricedat[1:,:] / pricedat[0:-1, :] -1
@@ -58,9 +64,9 @@ for val in spx_dailyret_tmp:
 daily_ret = []
 daily_ret.append(0)
 for i in range(1,len(values)):
-    daily_ret.append(values[i]/values[i-1] -1)
+    daily_ret.append(values[i][1]/values[i-1][1] -1)
 #print 'portfolio daily return:', np.std(daily_ret, dtype = np.float64)
-print  'portfolio total return:', values[-1]/values[0]
+print  'portfolio total return:', values[-1][1]/values[0][1]
 print  'portfolio daily return std:', np.std(daily_ret )
 print  'portfolio daily return mean:',np.mean(daily_ret)
 print  'portfolio daily return sharp ratio:', np.sqrt(len(daily_ret))*np.mean(daily_ret)/np.std(daily_ret, dtype = float64)

@@ -38,14 +38,15 @@ for line in f_trade:
     trades.append(item)
     symbols.append(trade_data[3])
 print trades
-startday = dt.datetime(2008,1,1)
-endday = dt.datetime(2009,12,31)
+#startday = dt.datetime(2011,1,1)
+#endday = dt.datetime(2012,12,26)
+startday = trades[0][0]
+endday = trades[-1][0]
 """step2 read history data"""
-symbols.append('$SPX')
 symbols = set(symbols)
 dataobj = da.DataAccess('Yahoo')
 timeofday = dt.timedelta(hours=16)
-timestamps = du.getNYSEdays(startday, endday, timeofday)
+timestamps = du.getSSEdays(startday, endday, timeofday)
 close = dataobj.get_data(timestamps, symbols, closefield)
 close = (close.fillna(method='ffill')).fillna(method='backfill')
 

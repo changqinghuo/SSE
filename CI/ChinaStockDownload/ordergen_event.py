@@ -58,13 +58,10 @@ def findEvents(symbols, startday,endday, marketSymbol,verbose=False):
             print __name__ + " reading data"
 	# Reading the Data
 	close = dataobj.get_data(timestamps, symbols, closefield)
-	for sym in symbols:
-        	print sym
-            	print close[sym]
-
+	
 	# Completing the Data - Removing the NaN values from the Matrix
-	#close = (close.fillna(method='ffill')).fillna(method='backfill')
-	#print close['SPY'][0], close['SPY'][1]
+	close = (close.fillna(method='ffill')).fillna(method='backfill')
+	
 
 	# Calculating Daily Returns for the Market
 	#tsu.returnize0(close.values)
@@ -150,7 +147,7 @@ endday = dt.datetime(2012,12,25)
 #eventProfiler.study(filename="MyEventStudy_2008.pdf",plotErrorBars=True,plotMarketNeutral=True,plotEvents=False,marketSymbol='SPY')
 #
 #
-market = "399001.SZ"
+market = "600001.SZ"
 eventMatrix = findEvents(symbols_2012,startday,endday,marketSymbol=market,verbose=True)
 eventProfiler = ep.EventProfiler(eventMatrix,startday,endday,lookback_days=20,lookforward_days=20,verbose=True)
 eventProfiler.study(filename="MyEventStudy_2012.pdf",plotErrorBars=True,plotMarketNeutral=True,plotEvents=False,marketSymbol=market)
